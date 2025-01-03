@@ -9,6 +9,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
+font = pygame.font.Font(None, 74)
 
 # Load images
 image_monk_smile = pygame.image.load('src/data/images/job_obousan.png')
@@ -40,7 +41,6 @@ def generate_sine_wave(frequency, duration, samplerate=44100):
 def play_sound(frequency, duration=1.0):
     wave = generate_sine_wave(frequency, duration)
     sd.play(wave, samplerate=44100)
-    # sd.wait()
 
 # キーと周波数の対応
 key_to_freq = {
@@ -62,14 +62,21 @@ key_to_freq = {
 # 現在再生中の音を管理する辞書
 playing_sounds = {}
 
+# オクターブの倍率
+octave_multiplier = 1.0
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key in key_to_freq and event.key not in playing_sounds:
-                play_sound(key_to_freq[event.key])
+                play_sound(key_to_freq[event.key] * octave_multiplier)
                 playing_sounds[event.key] = True
+            elif event.key == pygame.K_UP:
+                octave_multiplier *= 2.0  # オクターブを上げる
+            elif event.key == pygame.K_DOWN:
+                octave_multiplier /= 2.0  # オクターブを下げる
         elif event.type == pygame.KEYUP:
             if event.key in playing_sounds:
                 sd.stop()
@@ -82,6 +89,10 @@ while running:
     screen.blit(image_monk_pray, (screen.get_width() / 4 - image_monk_pray.get_width() / 2, 100))
     screen.blit(image_monk_pray, (screen.get_width() / 2 - image_monk_pray.get_width() / 2, 100))
     screen.blit(image_monk_pray, (3 * screen.get_width() / 4 - image_monk_pray.get_width() / 2, 100))
+
+    # オクターブの倍率を表示
+    octave_text = font.render(f"Octave Multiplier: {octave_multiplier}", True, (255, 255, 255))
+    screen.blit(octave_text, (50, 50))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
