@@ -40,7 +40,7 @@ def generate_sine_wave(frequency, duration, samplerate=44100):
 def play_sound(frequency, duration=1.0):
     wave = generate_sine_wave(frequency, duration)
     sd.play(wave, samplerate=44100)
-    sd.wait()
+    # sd.wait()
 
 # キーと周波数の対応
 key_to_freq = {
@@ -59,15 +59,21 @@ key_to_freq = {
     pygame.K_k: frequencies[12]  # ド（次のオクターブ）
 }
 
+# 現在再生中の音を管理する辞書
+playing_sounds = {}
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key in key_to_freq:
+            if event.key in key_to_freq and event.key not in playing_sounds:
                 play_sound(key_to_freq[event.key])
+                playing_sounds[event.key] = True
         elif event.type == pygame.KEYUP:
-            sd.stop()
+            if event.key in playing_sounds:
+                sd.stop()
+                del playing_sounds[event.key]
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
