@@ -12,8 +12,12 @@
 -e file:.
 cffi==1.17.1
     # via sounddevice
+mido==1.3.3
+    # via gassho-konkuru
 numpy==2.2.1
     # via gassho-konkuru
+packaging==24.2
+    # via mido
 pycparser==2.22
     # via cffi
 pygame==2.6.1

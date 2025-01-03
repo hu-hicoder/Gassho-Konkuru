@@ -3,6 +3,7 @@ import numpy as np
 import sounddevice as sd
 from midi_notes import play_midi
 from screen import screen_image
+import random
 
 # setting
 MIDI_FILE = r"src\data\midi\tabi.mid"
@@ -21,22 +22,27 @@ screen.fill("white")
 # Load images
 screen_image(
     screen,
-    "src/data/images/job_obousan.png",
+    "src/data/images/close.png",
     (380, 540),
     (screen.get_width() / 4 - 316 / 2, 100),
 )
 screen_image(
     screen,
-    "src/data/images/obousan_nenbutsu.png",
+    "src/data/images/little_open.png",
     (380, 540),
     (screen.get_width() / 2 - 316 / 2, 100),
 )
 screen_image(
     screen,
-    "src/data/images/obousan_nenbutsu.png",
+    "src/data/images/open.png",
     (380, 540),
     (3 * screen.get_width() / 4 - 316 / 2, 100),
 )
+
+# テキストを描画
+text = font.render("あなた", True, (0, 0, 0))  # 黒色のテキスト
+text_rect = text.get_rect(center=(screen.get_width() / 2, 100 + 540 + 20))  # 画像の下に配置
+screen.blit(text, text_rect)
 
 # 基準音「ラ」の周波数
 A4_FREQ = 440.0
@@ -104,6 +110,19 @@ while running:
                 # 新しい音を再生
                 play_sound(key_to_freq[event.key] * octave_multiplier)
                 playing_sounds[event.key] = True
+                # 画像をランダムに変更
+                images = [
+                    "close",
+                    "little_open",
+                    "open",
+                ]
+                positions = [(screen.get_width() / 4 - 316 / 2, 100),(screen.get_width() / 2 - 316 / 2, 100),(3 * screen.get_width() / 4 - 316 / 2, 100)]
+                screen_image(
+                    screen,
+                    f"src/data/images/{images[random.randint(0,2)]}.png",
+                    (380, 540),
+                    positions[random.randint(0,2)],
+                )
             elif event.key == pygame.K_UP:
                 octave_multiplier *= 2.0  # オクターブを上げる
             elif event.key == pygame.K_DOWN:
