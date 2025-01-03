@@ -2,7 +2,8 @@ import pygame
 import numpy as np
 import sounddevice as sd
 from midi_notes import play_midi
-from screen import screen_image
+from screen import screen_image, screen_text
+import random
 
 # setting
 MIDI_FILE = r"src\data\midi\tabi.mid"
@@ -13,7 +14,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-font = pygame.font.Font(None, 74)
+font = pygame.font.Font("src/data/font/NotoSansJP-Medium.ttf", 74)
 
 # initialize screen
 screen.fill("white")
@@ -21,21 +22,39 @@ screen.fill("white")
 # Load images
 screen_image(
     screen,
-    "src/data/images/job_obousan.png",
+    "src/data/images/close.png",
     (380, 540),
     (screen.get_width() / 4 - 316 / 2, 100),
 )
 screen_image(
     screen,
-    "src/data/images/obousan_nenbutsu.png",
+    "src/data/images/little_open.png",
     (380, 540),
     (screen.get_width() / 2 - 316 / 2, 100),
 )
 screen_image(
     screen,
-    "src/data/images/obousan_nenbutsu.png",
+    "src/data/images/open.png",
     (380, 540),
     (3 * screen.get_width() / 4 - 316 / 2, 100),
+)
+
+# テキストを描画
+screen_text(
+    screen,
+    "あなた",
+    "src/data/font/NotoSansJP-Medium.ttf",
+    74,
+    (0, 0, 0),
+    (screen.get_width() / 2 - 80, 600),
+)
+screen_text(
+    screen,
+    "octave multiplier: 1.0",
+    None,
+    50,
+    (0, 0, 0),
+    (50, 50),
 )
 
 # 基準音「ラ」の周波数
@@ -104,20 +123,52 @@ while running:
                 # 新しい音を再生
                 play_sound(key_to_freq[event.key] * octave_multiplier)
                 playing_sounds[event.key] = True
+                # 画像をランダムに変更
+                images = [
+                    "close",
+                    "little_open",
+                    "open",
+                ]
+                positions = [(screen.get_width() / 4 - 316 / 2, 100),(screen.get_width() / 2 - 316 / 2, 100),(3 * screen.get_width() / 4 - 316 / 2, 100)]
+                screen_image(
+                    screen,
+                    f"src/data/images/{images[random.randint(0,2)]}.png",
+                    (380, 540),
+                    positions[random.randint(0,2)],
+                )
             elif event.key == pygame.K_UP:
                 octave_multiplier *= 2.0  # オクターブを上げる
+                pygame.draw.rect(screen, (255, 255, 255), (30, 30, 1000, 50))
+                screen_text(
+                        screen,
+                        f"octave multiplier: {octave_multiplier}",
+                        None,
+                        50,
+                        (0, 0, 0),
+                        (50, 50),
+                    )
             elif event.key == pygame.K_DOWN:
                 octave_multiplier /= 2.0  # オクターブを下げる
+                pygame.draw.rect(screen, (255, 255, 255), (30, 30, 1000, 50))
+                screen_text(
+                        screen,
+                        f"octave multiplier: {octave_multiplier}",
+                        None,
+                        50,
+                        (0, 0, 0),
+                        (50, 50),
+                    )
         elif event.type == pygame.KEYUP:
             if event.key in playing_sounds:
                 sd.stop()
                 del playing_sounds[event.key]
 
     # オクターブの倍率を表示
-    octave_text = font.render(
-        f"Octave Multiplier: {octave_multiplier}", True, (255, 255, 255)
+    """ octave_font = pygame.font.Font(None, 50) 
+    octave_text = octave_font.render(
+        f"Octave Multiplier: {octave_multiplier}", True, (0, 0, 0)
     )
-    screen.blit(octave_text, (50, 50))
+    screen.blit(octave_text, (50, 50)) """
 
     # flip() the display to put your work on screen
     pygame.display.flip()
