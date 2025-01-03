@@ -1,8 +1,8 @@
-# Example file showing a circle moving on screen
 import pygame
 import numpy as np
 import sounddevice as sd
 from midi_notes import play_midi
+from screen import screen_image
 
 # setting
 MIDI_FILE = r"src\data\midi\tabi.mid"
@@ -15,13 +15,28 @@ running = True
 dt = 0
 font = pygame.font.Font(None, 74)
 
-# Load images
-image_monk_smile = pygame.image.load("src/data/images/job_obousan.png")
-image_monk_pray = pygame.image.load("src/data/images/obousan_nenbutsu.png")
+# initialize screen
+screen.fill("white")
 
-# 画像の大きさ変更
-image_monk_smile = pygame.transform.scale(image_monk_smile, (316 * 1.2, 450 * 1.2))
-image_monk_pray = pygame.transform.scale(image_monk_pray, (316 * 1.2, 450 * 1.2))
+# Load images
+screen_image(
+    screen,
+    "src/data/images/job_obousan.png",
+    (380, 540),
+    (screen.get_width() / 4 - 316 / 2, 100),
+)
+screen_image(
+    screen,
+    "src/data/images/obousan_nenbutsu.png",
+    (380, 540),
+    (screen.get_width() / 2 - 316 / 2, 100),
+)
+screen_image(
+    screen,
+    "src/data/images/obousan_nenbutsu.png",
+    (380, 540),
+    (3 * screen.get_width() / 4 - 316 / 2, 100),
+)
 
 # 基準音「ラ」の周波数
 A4_FREQ = 440.0
@@ -97,21 +112,6 @@ while running:
             if event.key in playing_sounds:
                 sd.stop()
                 del playing_sounds[event.key]
-
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
-
-    # Draw images
-    screen.blit(
-        image_monk_pray, (screen.get_width() / 4 - image_monk_pray.get_width() / 2, 100)
-    )
-    screen.blit(
-        image_monk_pray, (screen.get_width() / 2 - image_monk_pray.get_width() / 2, 100)
-    )
-    screen.blit(
-        image_monk_pray,
-        (3 * screen.get_width() / 4 - image_monk_pray.get_width() / 2, 100),
-    )
 
     # オクターブの倍率を表示
     octave_text = font.render(
