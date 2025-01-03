@@ -11,8 +11,8 @@ dt = 0
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
 # Load images
-image_monk_smile = pygame.image.load('src/data/image/job_obousan.png')
-image_monk_pray = pygame.image.load('src/data/image/obousan_nenbutsu.png')
+image_monk_smile = pygame.image.load('src/data/images/job_obousan.png')
+image_monk_pray = pygame.image.load('src/data/images/obousan_nenbutsu.png')
 
 # 画像の大きさ変更
 image_monk_smile = pygame.transform.scale(image_monk_smile, (316*1.2, 450*1.2))
