@@ -10,6 +10,14 @@ dt = 0
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
+# Load images
+image_monk_smile = pygame.image.load('src/data/image/job_obousan.png')
+image_monk_pray = pygame.image.load('src/data/image/obousan_nenbutsu.png')
+
+# 画像の大きさ変更
+image_monk_smile = pygame.transform.scale(image_monk_smile, (316*1.2, 450*1.2))
+image_monk_pray = pygame.transform.scale(image_monk_pray, (316*1.2, 450*1.2))
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -31,6 +39,11 @@ while running:
         player_pos.x -= 300 * dt
     if keys[pygame.K_d]:
         player_pos.x += 300 * dt
+
+    # Draw images
+    screen.blit(image_monk_pray, (screen.get_width() / 4 - image_monk_pray.get_width() / 2, 100))
+    screen.blit(image_monk_pray, (screen.get_width() / 2 - image_monk_pray.get_width() / 2, 100))
+    screen.blit(image_monk_pray, (3 * screen.get_width() / 4 - image_monk_pray.get_width() / 2, 100))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
