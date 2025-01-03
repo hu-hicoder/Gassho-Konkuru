@@ -10,7 +10,13 @@
 #   universal: false
 
 -e file:.
+cffi==1.17.1
+    # via sounddevice
 numpy==2.2.1
     # via gassho-konkuru
+pycparser==2.22
+    # via cffi
 pygame==2.6.1
+    # via gassho-konkuru
+sounddevice==0.5.1
     # via gassho-konkuru
