@@ -16,6 +16,29 @@ running = True
 dt = 0
 font = pygame.font.Font("src/data/font/NotoSansJP-Medium.ttf", 74)
 
+# タイトル画面の表示
+def show_title_screen():
+    screen.fill("white")
+    title_font = pygame.font.Font("src/data/font/NotoSansJP-Medium.ttf", 90)
+    start_font = pygame.font.Font("src/data/font/NotoSansJP-Medium.ttf", 50)
+    title_text = title_font.render("合掌コンクール", True, (0, 0, 0))
+    start_text = start_font.render("Press any key to start", True, (0, 0, 0))
+    screen.blit(title_text, (screen.get_width() / 2 - title_text.get_width() / 2, 200))
+    screen.blit(start_text, (screen.get_width() / 2 - start_text.get_width() / 2, 400))
+    screen_image(screen, "src/data/images/open.png", (380, 540), (screen.get_width()/2 - 700, 100))
+    screen_image(screen, "src/data/images/close.png", (380, 540), (screen.get_width()/2 + 300, 100))
+
+    pygame.display.flip()
+
+show_title_screen()
+
+# キーが押されるまで待つ
+waiting = True
+while waiting:
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            waiting = False
+
 # initialize screen
 screen.fill("white")
 
@@ -162,13 +185,6 @@ while running:
             if event.key in playing_sounds:
                 sd.stop()
                 del playing_sounds[event.key]
-
-    # オクターブの倍率を表示
-    """ octave_font = pygame.font.Font(None, 50) 
-    octave_text = octave_font.render(
-        f"Octave Multiplier: {octave_multiplier}", True, (0, 0, 0)
-    )
-    screen.blit(octave_text, (50, 50)) """
 
     # flip() the display to put your work on screen
     pygame.display.flip()
