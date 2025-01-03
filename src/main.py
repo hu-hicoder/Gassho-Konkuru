@@ -28,18 +28,6 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
 
-    pygame.draw.circle(screen, "red", player_pos, 40)
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
-
     # Draw images
     screen.blit(image_monk_pray, (screen.get_width() / 4 - image_monk_pray.get_width() / 2, 100))
     screen.blit(image_monk_pray, (screen.get_width() / 2 - image_monk_pray.get_width() / 2, 100))
