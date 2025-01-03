@@ -2,7 +2,7 @@ import pygame
 import numpy as np
 import sounddevice as sd
 from midi_notes import play_midi
-from screen import screen_image
+from screen import screen_image, screen_text
 import random
 
 # setting
@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-font = pygame.font.Font(None, 74)
+font = pygame.font.Font("src/data/font/NotoSansJP-Medium.ttf", 74)
 
 # initialize screen
 screen.fill("white")
@@ -40,9 +40,22 @@ screen_image(
 )
 
 # テキストを描画
-text = font.render("あなた", True, (0, 0, 0))  # 黒色のテキスト
-text_rect = text.get_rect(center=(screen.get_width() / 2, 100 + 540 + 20))  # 画像の下に配置
-screen.blit(text, text_rect)
+screen_text(
+    screen,
+    "あなた",
+    "src/data/font/NotoSansJP-Medium.ttf",
+    74,
+    (0, 0, 0),
+    (screen.get_width() / 2 - 80, 600),
+)
+screen_text(
+    screen,
+    "octave multiplier: 1.0",
+    None,
+    50,
+    (0, 0, 0),
+    (50, 50),
+)
 
 # 基準音「ラ」の周波数
 A4_FREQ = 440.0
@@ -125,18 +138,37 @@ while running:
                 )
             elif event.key == pygame.K_UP:
                 octave_multiplier *= 2.0  # オクターブを上げる
+                pygame.draw.rect(screen, (255, 255, 255), (30, 30, 1000, 50))
+                screen_text(
+                        screen,
+                        f"octave multiplier: {octave_multiplier}",
+                        None,
+                        50,
+                        (0, 0, 0),
+                        (50, 50),
+                    )
             elif event.key == pygame.K_DOWN:
                 octave_multiplier /= 2.0  # オクターブを下げる
+                pygame.draw.rect(screen, (255, 255, 255), (30, 30, 1000, 50))
+                screen_text(
+                        screen,
+                        f"octave multiplier: {octave_multiplier}",
+                        None,
+                        50,
+                        (0, 0, 0),
+                        (50, 50),
+                    )
         elif event.type == pygame.KEYUP:
             if event.key in playing_sounds:
                 sd.stop()
                 del playing_sounds[event.key]
 
     # オクターブの倍率を表示
-    octave_text = font.render(
-        f"Octave Multiplier: {octave_multiplier}", True, (255, 255, 255)
+    """ octave_font = pygame.font.Font(None, 50) 
+    octave_text = octave_font.render(
+        f"Octave Multiplier: {octave_multiplier}", True, (0, 0, 0)
     )
-    screen.blit(octave_text, (50, 50))
+    screen.blit(octave_text, (50, 50)) """
 
     # flip() the display to put your work on screen
     pygame.display.flip()
