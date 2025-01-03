@@ -26,3 +26,6 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/gassho_konkuru"]
+
+[tool.rye.scripts]
+game = { cmd = "python ./src/main.py" }
