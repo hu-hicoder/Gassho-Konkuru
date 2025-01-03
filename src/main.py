@@ -40,7 +40,7 @@ def generate_sine_wave(frequency, duration, samplerate=44100):
 # 音声データを再生する関数
 def play_sound(frequency, duration=1.0):
     wave = generate_sine_wave(frequency, duration)
-    sd.play(wave, samplerate=44100)
+    sd.play(wave, samplerate=44100, loop=True)
 
 # キーと周波数の対応
 key_to_freq = {
@@ -70,7 +70,12 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key in key_to_freq and event.key not in playing_sounds:
+            if event.key in key_to_freq:
+                # 現在再生中の音を停止
+                if playing_sounds:
+                    sd.stop()
+                    playing_sounds.clear()
+                # 新しい音を再生
                 play_sound(key_to_freq[event.key] * octave_multiplier)
                 playing_sounds[event.key] = True
             elif event.key == pygame.K_UP:
